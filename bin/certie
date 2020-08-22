@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+require 'certie'
+
+def show_usage
+  puts "Usage: #{$0} <common_name>"
+  puts "Example: #{$0} example.com"
+end
+
+ARGV.each do |iterarg|
+  if iterarg=='--help'
+    show_usage ; exit
+  end
+end
+
+if ARGV.length == 0
+  show_usage ; exit
+end
+
+CertificateWrapper.build ARGV[0]
