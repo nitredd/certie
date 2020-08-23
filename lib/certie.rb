@@ -2,9 +2,16 @@
 require 'openssl'
 
 class CertificateWrapper
-  @@subject_prefix = '/C=AE/ST=Dubai/L=Hamriya/O=Knight/OU=Engineering'
-  # @@rootCa = nil
-  # @@rootKey = nil
+  @@subject_prefix = '/C=AE/ST=Dubai/L=Dubai/O=KNR/OU=Software'
+
+  def self.load_subject_prefix
+    filename = "#{Dir.home}/.certie_subjprefix"
+    if File.exists?(filename)
+      @@subject_prefix = File.read(filename).chomp!
+    else
+      File.write(filename, @@subject_prefix)
+    end
+  end
 
   def self.get_counter_next
     serial = 0
@@ -52,7 +59,6 @@ class CertificateWrapper
 
     ef = OpenSSL::X509::ExtensionFactory.new
 
-
     if cn == "ca"
       cert.issuer = OpenSSL::X509::Name.parse subject
       ef.subject_certificate = cert
@@ -84,15 +90,19 @@ class CertificateWrapper
       end
     end
 
+    # TODO: Find an alternative to invoking OpenSSL and cat
     `openssl pkcs8 -topk8 -inform pem -in "#{cn}.rsa" -out "#{cn}.key" -nocrypt`
     `cat "#{cn}.cert" "#{cn}.key" > "#{cn}.pem"`
   end
 
 
   def self.build(cn)
+    load_subject_prefix
+
     doWeHaveARootCertificate = File.exists? 'ca.cert'
     doWeHaveARootKey = File.exists? 'ca.rsa'
 
+    # TODO: Handle the case where we have only one and not the other (cert and key)
     if not (doWeHaveARootCertificate and doWeHaveARootKey)
       create_certificate
     end
