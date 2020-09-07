@@ -7,9 +7,18 @@ class CertificateWrapper
   def self.load_subject_prefix
     filename = "#{Dir.home}/.certie_subjprefix"
     if File.exists?(filename)
-      @@subject_prefix = File.read(filename).chomp!
+      @@subject_prefix = File.read(filename).chomp
     else
       File.write(filename, @@subject_prefix)
+    end
+  end
+
+  def self.file_cat(output_file, input_array)
+    File.open output_file, 'w' do |outfile|
+      input_array.each do |iter_infile|
+        outfile.write(File.read(iter_infile))
+        outfile.write "\n"
+      end
     end
   end
 
@@ -90,9 +99,12 @@ class CertificateWrapper
       end
     end
 
-    # TODO: Find an alternative to invoking OpenSSL and cat
+    # TODO: Find an alternative to invoking OpenSSL and cat - OpenSSL v2.2.0 seems to have private_to_pem in OpenSSL::PKey
     `openssl pkcs8 -topk8 -inform pem -in "#{cn}.rsa" -out "#{cn}.key" -nocrypt`
-    `cat "#{cn}.cert" "#{cn}.key" > "#{cn}.pem"`
+
+    # TODO: Test replacement of the system call cat with file_cat
+    # `cat "#{cn}.cert" "#{cn}.key" > "#{cn}.pem"`
+    file_cat "#{cn}.pem", ["#{cn}.cert", "#{cn}.key"]
   end
 
 
@@ -110,3 +122,6 @@ class CertificateWrapper
     create_certificate cn
   end
 end
+
+# key = OpenSSL::PKey::RSA.new 2048
+# puts key.private_to_pem
