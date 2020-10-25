@@ -7,5 +7,5 @@ Gem::Specification.new do |spec|
 	spec.files = ["lib/certie.rb"]
 	spec.require_paths = ["lib"]
 	spec.executables=['certie']
-	spec.add_dependency "openssl" #, "~> 2.4"
+	spec.add_dependency "openssl", "~> 2.2.0"
 end
