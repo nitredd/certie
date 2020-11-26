@@ -1,4 +1,3 @@
-
 require 'openssl'
 
 class CertificateWrapper
@@ -99,10 +98,13 @@ class CertificateWrapper
       end
     end
 
-    # TODO: Find an alternative to invoking OpenSSL and cat - OpenSSL v2.2.0 seems to have private_to_pem in OpenSSL::PKey
-    `openssl pkcs8 -topk8 -inform pem -in "#{cn}.rsa" -out "#{cn}.key" -nocrypt`
+    # An alternative to invoking OpenSSL and cat - OpenSSL v2.2.0 has private_to_pem in OpenSSL::PKey
+    # `openssl pkcs8 -topk8 -inform pem -in "#{cn}.rsa" -out "#{cn}.key" -nocrypt`
+    File.open "#{cn}.key", 'wb' do |myfile|
+      myfile.print(key.private_to_pem)
+    end
 
-    # TODO: Test replacement of the system call cat with file_cat
+    # Replaced system call cat with file_cat method
     # `cat "#{cn}.cert" "#{cn}.key" > "#{cn}.pem"`
     file_cat "#{cn}.pem", ["#{cn}.cert", "#{cn}.key"]
   end
@@ -122,6 +124,3 @@ class CertificateWrapper
     create_certificate cn
   end
 end
-
-# key = OpenSSL::PKey::RSA.new 2048
-# puts key.private_to_pem
