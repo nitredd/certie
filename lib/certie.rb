@@ -90,6 +90,7 @@ class CertificateWrapper
       ef.issuer_certificate = rootCert
       # cert.add_extension ef.create_extension('keyUsage', 'digitalSignature', true)  # TODO: check if we can set webServer and webClient
       cert.add_extension ef.create_extension('subjectKeyIdentifier', 'hash', false )
+      cert.add_extension ef.create_extension('subjectAltName', 'DNS:' + cn, false)  #This can be CSV of multiple DNS: and IP: entries
 
       cert.sign rootKey, OpenSSL::Digest.new('SHA256')
 

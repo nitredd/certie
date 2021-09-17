@@ -1,8 +1,8 @@
 Gem::Specification.new do |spec|
 	spec.authors = ["Katkam Nitin Reddy"]
 	spec.name = "certie"
-	spec.version = "0.0.5"
-	spec.date = '2020-11-27'
+	spec.version = "0.0.6"
+	spec.date = '2021-09-17'
   spec.summary = "A utility for generating certificates"
 	spec.files = ["lib/certie.rb"]
 	spec.require_paths = ["lib"]
