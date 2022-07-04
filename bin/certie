@@ -4,6 +4,10 @@ require 'certie'
 def show_usage
   puts "Usage: #{$0} <common_name>"
   puts "Example: #{$0} example.com"
+  puts ''
+  puts 'The subject prefix can be set by performing the following'
+  puts 'cat > ~/.certie_subjprefix'
+  puts '/C=AE/ST=Dubai/L=Dubai/O=Pocket Theories/OU=Engineering'
 end
 
 ARGV.each do |iterarg|
