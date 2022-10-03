@@ -54,3 +54,11 @@ sudo gem install openssl -v 2.2.0
 sudo apt install -y ruby-dev libssl-dev build-essential
 sudo gem install openssl -v 2.2.0
 ```
+
+For Amazon Linux 2 (ruby-devel is Ruby 2.0 so install Ruby 2.6 from amazon-linux-extras):
+```
+sudo yum groupinstall -y "Development Tools"
+sudo yum install -y ruby-devel openssl-devel
+sudo gem install openssl -v 2.2.0
+sudo amazon-linux-extras install ruby2.6
+```
